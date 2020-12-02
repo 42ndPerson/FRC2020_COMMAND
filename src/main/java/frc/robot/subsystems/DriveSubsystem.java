@@ -48,48 +48,48 @@ public class DriveSubsystem extends SubsystemBase {
 
   public DriveSubsystem() {
     // Sets the distance per pulse for the encoders
-    frontLeft.configFactoryDefault();
-    frontRight.configFactoryDefault();
-    backLeft.configFactoryDefault();
-    backRight.configFactoryDefault();
+    this.frontLeft.configFactoryDefault();
+    this.frontRight.configFactoryDefault();
+    this.backLeft.configFactoryDefault();
+    this.backRight.configFactoryDefault();
 
-    backLeft.follow(frontLeft);
-    backRight.follow(frontRight);
+    this.backLeft.follow(frontLeft);
+    this.backRight.follow(frontRight);
 
-    frontRight.setInverted(true);
-    frontLeft.setInverted(false);
+    this.frontRight.setInverted(true);
+    this.frontLeft.setInverted(false);
 
-    backRight.setInverted(InvertType.FollowMaster);
-    backLeft.setInverted(InvertType.FollowMaster);
+    this.backRight.setInverted(InvertType.FollowMaster);
+    this.backLeft.setInverted(InvertType.FollowMaster);
 
-    frontRight.setNeutralMode(NeutralMode.Brake);
-    frontLeft.setNeutralMode(NeutralMode.Brake);
-    backRight.setNeutralMode(NeutralMode.Brake);
-    backLeft.setNeutralMode(NeutralMode.Brake);
+    this.frontRight.setNeutralMode(NeutralMode.Brake);
+    this.frontLeft.setNeutralMode(NeutralMode.Brake);
+    this.backRight.setNeutralMode(NeutralMode.Brake);
+    this.backLeft.setNeutralMode(NeutralMode.Brake);
 
-    m_drive = new DifferentialDrive(frontLeft, frontRight);
-    m_drive.setRightSideInverted(false);
+    this.m_drive = new DifferentialDrive(frontLeft, frontRight);
+    this.m_drive.setRightSideInverted(false);
 
     resetEncoders();
-    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+    this.m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftEncoderDistance(),
+    this.m_odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftEncoderDistance(),
                       getRightEncoderDistance());
-   SmartDashboard.putNumber("Gyro", getHeading());
-   SmartDashboard.putNumber("PosX", getPose().getTranslation().getX());
-   SmartDashboard.putNumber("PosY", getPose().getTranslation().getY());
-   SmartDashboard.putNumber("Encoder Left", getLeftEncoderDistance());
-   SmartDashboard.putNumber("Encoder Right", getRightEncoderDistance());
+    SmartDashboard.putNumber("Gyro", getHeading());
+    SmartDashboard.putNumber("PosX", getPose().getTranslation().getX());
+    SmartDashboard.putNumber("PosY", getPose().getTranslation().getY());
+    SmartDashboard.putNumber("Encoder Left", getLeftEncoderDistance());
+    SmartDashboard.putNumber("Encoder Right", getRightEncoderDistance());
 
 
   }
 
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return this.m_odometry.getPoseMeters();
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -98,44 +98,43 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
-    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+    this.m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
   }
 
   public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+    this.m_drive.arcadeDrive(fwd, rot);
   }
 
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    frontLeft.setVoltage(leftVolts);
-    frontRight.setVoltage(rightVolts);
-    m_drive.feed();
+    this.frontLeft.setVoltage(leftVolts);
+    this.frontRight.setVoltage(rightVolts);
+    this.m_drive.feed();
   }
 
   public void resetEncoders() {
-    frontLeft.getSensorCollection().setIntegratedSensorPosition(0,0);
+    this.frontLeft.getSensorCollection().setIntegratedSensorPosition(0,0);
     
-    frontRight.getSensorCollection().setIntegratedSensorPosition(0, 0);
-    
+    this.frontRight.getSensorCollection().setIntegratedSensorPosition(0, 0);
   }
 
   public double getLeftEncoderDistance() {
-      double frontLeftEncoder = frontLeft.getSensorCollection().getIntegratedSensorPosition() * DriveConstants.kEncoderDistancePerPulse;
-      return frontLeftEncoder;
+    double frontLeftEncoder = this.frontLeft.getSensorCollection().getIntegratedSensorPosition() * DriveConstants.kEncoderDistancePerPulse;
+    return frontLeftEncoder;
     //return ((frontLeft.getSensorCollection().getQuadraturePosition() + backLeft.getSensorCollection().getQuadraturePosition())/2);
   }
 
   public double getRightEncoderDistance() {
-    double frontRightEncoder = frontRight.getSensorCollection().getIntegratedSensorPosition()* DriveConstants.kEncoderDistancePerPulse;
+    double frontRightEncoder = this.frontRight.getSensorCollection().getIntegratedSensorPosition()* DriveConstants.kEncoderDistancePerPulse;
     return frontRightEncoder * -1;
    //return ((frontRight.getSensorCollection().getQuadraturePosition() + backRight.getSensorCollection().getQuadraturePosition())/2);
   }
 
   public void setMaxOutput(double maxOutput) {
-    m_drive.setMaxOutput(maxOutput);
+    this.m_drive.setMaxOutput(maxOutput);
   }
 
   public void zeroHeading() {
-    m_gyro.reset();
+    this.m_gyro.reset();
   }
 
   public double getHeading() {
@@ -143,13 +142,13 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getTurnRate() {
-    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return this.m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   public double getLeftEncoderVelocity()
   {
     //For reversed left, call frontRight
-    double frontLeftEncoder = frontLeft.getSensorCollection().getIntegratedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse;
+    double frontLeftEncoder = this.frontLeft.getSensorCollection().getIntegratedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse;
     return frontLeftEncoder;
      // return (frontLeft.getSensorCollection().getQuadratureVelocity() + backLeft.getSensorCollection().getQuadratureVelocity())/2.0;
   }
@@ -157,19 +156,18 @@ public class DriveSubsystem extends SubsystemBase {
   public double getRightEncoderVelocity()
   {
     //For revsered right, call frontLeft
-    double frontRightEncoder = frontRight.getSensorCollection().getIntegratedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse;
-      return frontRightEncoder*-1;
-     // return (frontRight.getSensorCollection().getQuadratureVelocity() + backRight.getSensorCollection().getQuadratureVelocity())/2.0;
+    double frontRightEncoder = this.frontRight.getSensorCollection().getIntegratedSensorVelocity() * DriveConstants.kEncoderDistancePerPulse;
+    return frontRightEncoder*-1;
+    // return (frontRight.getSensorCollection().getQuadratureVelocity() + backRight.getSensorCollection().getQuadratureVelocity())/2.0;
   }
 
   public void tankDrive(double leftPower, double rightPower)
   {
-
     //ax^3 + (1-a)x
     /*double leftOutput = DriveConstants.joystickGain * Math.pow(leftPower, 3) + DriveConstants.joystickGain * leftPower;
     double rightOutput = DriveConstants.joystickGain * Math.pow(rightPower, 3) + DriveConstants.joystickGain * rightPower;
     */ 
-    m_drive.tankDrive(leftPower, rightPower);
+    this.m_drive.tankDrive(leftPower, rightPower);
      // System.out.println(leftPower + " " + rightPower);
   }
 
