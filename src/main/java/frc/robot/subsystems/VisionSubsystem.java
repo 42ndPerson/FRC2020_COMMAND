@@ -29,85 +29,85 @@ public class VisionSubsystem extends SubsystemBase {
     public VisionSubsystem() {
         inst = NetworkTableInstance.getDefault();
 
-        mlTable = inst.getTable("ML");
+        mlTable = this.inst.getTable("ML");
 
-        powerCellAngleEntry = mlTable.getEntry("power_cell_angle");
-        powerCellExistsEntry = mlTable.getEntry("power_cell_exists");
-        powerCellPosEntry = mlTable.getEntry("power_cell_pos");
-        tapeAngleEntry = mlTable.getEntry("tape_angle");
-        tapeDistEntry = mlTable.getEntry("tape_dist");
-        tapeFoundEntry = mlTable.getEntry("tape_found");
-        powerCellXEntry = mlTable.getEntry("power_cell_x");
-        powerCellYEntry = mlTable.getEntry("power_cell_y");
+        powerCellAngleEntry = this.mlTable.getEntry("power_cell_angle");
+        powerCellExistsEntry = this.mlTable.getEntry("power_cell_exists");
+        powerCellPosEntry = this.mlTable.getEntry("power_cell_pos");
+        tapeAngleEntry = this.mlTable.getEntry("tape_angle");
+        tapeDistEntry = this.mlTable.getEntry("tape_dist");
+        tapeFoundEntry = this.mlTable.getEntry("tape_found");
+        powerCellXEntry = this.mlTable.getEntry("power_cell_x");
+        powerCellYEntry = this.mlTable.getEntry("power_cell_y");
 
-        inst.startClientTeam(3006);
+        this.inst.startClientTeam(3006);
 
-        camMode = false;
+        this.camMode = false;
 
     }
 
     @Override
     public void periodic() {
-        tapeFound = tapeFoundEntry.getBoolean(false);
+        tapeFound = this.tapeFoundEntry.getBoolean(false);
         if (camMode) {
-            tapeAngle = tapeAngleEntry.getDouble(0);
-            tapeDist = tapeDistEntry.getDouble(0);
+            tapeAngle = this.tapeAngleEntry.getDouble(0);
+            tapeDist = this.tapeDistEntry.getDouble(0);
         } else {
-            powerCellAngle = powerCellAngleEntry.getDouble(0);
-            powerCellExists = powerCellExistsEntry.getBoolean(false);
-            powerCellPos = powerCellPosEntry.getDoubleArray(new double[] {width/2, height/2});
-            powerCellX = powerCellXEntry.getDouble(0);
-            powerCellY = powerCellYEntry.getDouble(0);
+            powerCellAngle = this.powerCellAngleEntry.getDouble(0);
+            powerCellExists = this.powerCellExistsEntry.getBoolean(false);
+            powerCellPos = this.powerCellPosEntry.getDoubleArray(new double[] {this.width/2, this.height/2});
+            powerCellX = this.powerCellXEntry.getDouble(0);
+            powerCellY = this.powerCellYEntry.getDouble(0);
         }
 
     }
 
     public double getWidth() {
-        return width;
+        return this.width;
     }
 
     public double getHeight() {
-        return height;
+        return this.height;
     }
 
     public void setCamMode(boolean mode) {
-        if(camMode == mode) {
+        if(this.camMode == mode) {
             return;
         } else {
-            camMode = mode;
-            inst.getTable("SmartDashboard").getEntry("cam").setBoolean(mode);
+            this.camMode = mode;
+            this.inst.getTable("SmartDashboard").getEntry("cam").setBoolean(mode);
         }
     }
 
     public double getPowerCellAngle() {
-        return powerCellAngle;
+        return this.powerCellAngle;
     }
 
     public boolean getPowerCellExists() {
-        return powerCellExists;
+        return this.powerCellExists;
     }
 
     public double[] getPowerCellPos() {
-        return powerCellPos;
+        return this.powerCellPos;
     }
 
     public double getTapeAngle() {
-        return tapeAngle;
+        return this.tapeAngle;
     }
 
     public double getTapeDist() {
-        return tapeDist;
+        return this.tapeDist;
     }
 
     public boolean getTapeFound() {
-        return tapeFound;
+        return this.tapeFound;
     }
     
     public double getTargetAngle() {
-        if (camMode) {
-            return tapeAngle;
+        if (this.camMode) {
+            return this.tapeAngle;
         } else {
-            return powerCellAngle;
+            return this.powerCellAngle;
         }
     }
 
@@ -117,25 +117,23 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     public double getPowerCellX() {
-        return powerCellX;
+        return this.powerCellX;
     }
 
     public double getPowerCellY() {
-        return powerCellY;
+        return this.powerCellY;
     }
 
     public void enableIntakeSideLED(boolean enabled) {
-        intakeLED.set(enabled);
+        this.intakeLED.set(enabled);
     }
     public void enableTurretLED(boolean enabled) {
-        turretLED.set(enabled);
+        this.turretLED.set(enabled);
     }
 
     public void enableAllLEDs(boolean enabled) {
-        turretLED.set(enabled);
-        intakeLED.set(enabled);
-        robotLED.set(enabled);
+        this.turretLED.set(enabled);
+        this.intakeLED.set(enabled);
+        this.robotLED.set(enabled);
     }
-
-
 }
